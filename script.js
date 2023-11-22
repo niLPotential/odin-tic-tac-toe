@@ -90,17 +90,18 @@ function GameController(
       }'s token into row ${row} and column ${column}`
     );
     board.addToken(row, column, getActivePlayer().token);
+
+    // win logic
+
+    switchPlayerTurn();
+    printNewRound();
   }
 
-  // win logic
-
-  switchPlayerTurn();
   printNewRound();
 
   return {
     playRound,
     getActivePlayer,
+    getBoard: board.getBoard,
   };
 }
-
-const game = GameController();
