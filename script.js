@@ -15,8 +15,8 @@ function Gameboard() {
   }
 
   function addToken(row, column, player) {
-    if (board[row][column] === 0) {
-      board[row][column] = player;
+    if (board[row][column].getValue() === 0) {
+      board[row][column].addToken(player);
     }
   }
 
@@ -105,3 +105,44 @@ function GameController(
     getBoard: board.getBoard,
   };
 }
+
+function ScreenController() {
+  const game = GameController();
+  const playerTurnDiv = document.querySelector(".turn");
+  const boardDiv = document.querySelector(".board");
+
+  function updateScreen() {
+    boardDiv.textContent = "";
+
+    const board = game.getBoard();
+    const activePlayer = game.getActivePlayer();
+
+    playerTurnDiv.textContent = `${activePlayer.name}'s turn...`;
+
+    board.forEach((row, rowIndex) => {
+      row.forEach((cell, columnIndex) => {
+        const cellButton = document.createElement("button");
+        cellButton.classList.add("cell");
+        cellButton.dataset.row = rowIndex;
+        cellButton.dataset.column = columnIndex;
+        cellButton.textContent = cell.getValue();
+        boardDiv.appendChild(cellButton);
+      });
+    });
+  }
+
+  function clickHandlerBoard(e) {
+    const selectedRow = e.target.dataset.row;
+    const selectedColumn = e.target.dataset.column;
+    if (!selectedRow || !selectedColumn) return;
+    console.log(selectedRow, selectedColumn);
+
+    game.playRound(selectedRow, selectedColumn);
+    updateScreen();
+  }
+  boardDiv.onclick = clickHandlerBoard;
+
+  updateScreen();
+}
+
+ScreenController();
