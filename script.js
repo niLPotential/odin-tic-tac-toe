@@ -123,6 +123,7 @@ function GameController(
         getActivePlayer().name
       }'s token into row ${row} and column ${column}`
     );
+    board.addToken(row, column, getActivePlayer().token);
 
     if (checkRow(row)) {
       console.log(`row ${row} is filled`);
@@ -177,6 +178,9 @@ function ScreenController() {
         cellButton.dataset.row = rowIndex;
         cellButton.dataset.column = columnIndex;
         cellButton.textContent = cell.getValue();
+        if (cell.getValue() !== 0) {
+          cellButton.disabled = "disabled";
+        }
         boardDiv.appendChild(cellButton);
       });
     });
