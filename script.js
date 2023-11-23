@@ -83,6 +83,14 @@ function GameController(
     console.log(`${getActivePlayer().name}'s turn`);
   }
 
+  function endGame(player) {
+    if (player === 0) {
+      console.log("Tie");
+    } else {
+      console.log(`${player} won`);
+    }
+  }
+
   function playRound(row, column) {
     console.log(
       `Adding ${
@@ -92,6 +100,25 @@ function GameController(
     board.addToken(row, column, getActivePlayer().token);
 
     // win logic
+    if (
+      board
+        .getBoard()
+        [row].every((cell) => cell.getValue() === getActivePlayer().token)
+    ) {
+      console.log(`row ${row} is filled`);
+      endGame(getActivePlayer().token);
+    }
+
+    if (
+      board
+        .getBoard()
+        .every(
+          (rowArr) => rowArr[column].getValue() === getActivePlayer().token
+        )
+    ) {
+      console.log(`column ${column} is filled`);
+      endGame(getActivePlayer().token);
+    }
 
     switchPlayerTurn();
     printNewRound();
@@ -135,7 +162,6 @@ function ScreenController() {
     const selectedRow = e.target.dataset.row;
     const selectedColumn = e.target.dataset.column;
     if (!selectedRow || !selectedColumn) return;
-    console.log(selectedRow, selectedColumn);
 
     game.playRound(selectedRow, selectedColumn);
     updateScreen();
