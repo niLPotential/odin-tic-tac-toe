@@ -17,6 +17,8 @@ function Gameboard() {
   function addToken(row, column, player) {
     if (board[row][column].getValue() === 0) {
       board[row][column].addToken(player);
+    } else {
+      console.log("The cell is already taken");
     }
   }
 
@@ -83,6 +85,30 @@ function GameController(
     console.log(`${getActivePlayer().name}'s turn`);
   }
 
+  function checkRow(row) {
+    return board
+      .getBoard()
+      [row].every((cell) => cell.getValue() === getActivePlayer().token);
+  }
+
+  function checkColumn(column) {
+    return board
+      .getBoard()
+      .every((row) => row[column].getValue() === getActivePlayer().token);
+  }
+
+  function checkFirstDiagonal() {
+    return [0, 1, 2].every(
+      (i) => board.getBoard()[i][i].getValue() === getActivePlayer().token
+    );
+  }
+
+  function checkSecondDiagonal() {
+    return [0, 1, 2].every(
+      (i) => board.getBoard()[i][2 - i].getValue() === getActivePlayer().token
+    );
+  }
+
   function endGame(player) {
     if (player === 0) {
       console.log("Tie");
@@ -97,26 +123,24 @@ function GameController(
         getActivePlayer().name
       }'s token into row ${row} and column ${column}`
     );
-    board.addToken(row, column, getActivePlayer().token);
 
-    // win logic
-    if (
-      board
-        .getBoard()
-        [row].every((cell) => cell.getValue() === getActivePlayer().token)
-    ) {
+    if (checkRow(row)) {
       console.log(`row ${row} is filled`);
       endGame(getActivePlayer().token);
     }
 
-    if (
-      board
-        .getBoard()
-        .every(
-          (rowArr) => rowArr[column].getValue() === getActivePlayer().token
-        )
-    ) {
+    if (checkColumn(column)) {
       console.log(`column ${column} is filled`);
+      endGame(getActivePlayer().token);
+    }
+
+    if (checkFirstDiagonal()) {
+      console.log("diagonal is filled");
+      endGame(getActivePlayer().token);
+    }
+
+    if (checkSecondDiagonal()) {
+      console.log("diagonal is filled");
       endGame(getActivePlayer().token);
     }
 
