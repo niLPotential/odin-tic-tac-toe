@@ -159,9 +159,53 @@ function GameController(
 }
 
 function ScreenController() {
-  const game = GameController();
   const playerTurnDiv = document.querySelector(".turn");
   const boardDiv = document.querySelector(".board");
+  const form = document.querySelector(".form");
+
+  getNames();
+
+  function getNames() {
+    playerTurnDiv.textContent = "Please enter the players' names";
+    const first = createInputWithLabel("First");
+    form.appendChild(first.label);
+    form.appendChild(first.input);
+
+    const second = createInputWithLabel("Second");
+    form.appendChild(second.label);
+    form.appendChild(second.input);
+
+    const button = document.createElement("button");
+    button.type = "submit";
+    button.textContent = "Submit";
+    button.onclick = clickSubmitNames;
+
+    form.appendChild(button);
+
+    function clickSubmitNames(e) {
+      e.preventDefault();
+
+      const data = new FormData(e.target.form);
+
+      return { firstName: data.get("First"), secondName: data.get("Second") };
+    }
+
+    function createInputWithLabel(str) {
+      const input = document.createElement("input");
+      input.type = "text";
+      input.name = str;
+      input.id = str;
+      input.required = "required";
+
+      const label = document.createElement("label");
+      label.setAttribute("for", str);
+      label.textContent = `${str} player's name`;
+
+      return { input, label };
+    }
+  }
+
+  // const game = GameController(firstName, secondName);
 
   function updateScreen() {
     boardDiv.textContent = "";
@@ -196,7 +240,7 @@ function ScreenController() {
   }
   boardDiv.onclick = clickHandlerBoard;
 
-  updateScreen();
+  // updateScreen();
 }
 
 ScreenController();
