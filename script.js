@@ -161,12 +161,14 @@ function GameController(
 function ScreenController() {
   const playerTurnDiv = document.querySelector(".turn");
   const boardDiv = document.querySelector(".board");
-  const form = document.querySelector(".form");
-
-  getNames();
 
   function getNames() {
+    clearBoard();
+
     playerTurnDiv.textContent = "Please enter the players' names";
+
+    const form = document.createElement("form");
+
     const first = createInputWithLabel("First");
     form.appendChild(first.label);
     form.appendChild(first.input);
@@ -181,6 +183,8 @@ function ScreenController() {
     button.onclick = clickSubmitNames;
 
     form.appendChild(button);
+
+    boardDiv.appendChild(form);
 
     function clickSubmitNames(e) {
       e.preventDefault();
@@ -205,10 +209,12 @@ function ScreenController() {
     }
   }
 
+  getNames();
+
   // const game = GameController(firstName, secondName);
 
   function updateScreen() {
-    boardDiv.textContent = "";
+    clearBoard();
 
     const board = game.getBoard();
     const activePlayer = game.getActivePlayer();
@@ -238,7 +244,12 @@ function ScreenController() {
     game.playRound(selectedRow, selectedColumn);
     updateScreen();
   }
-  boardDiv.onclick = clickHandlerBoard;
+
+  function clearBoard() {
+    boardDiv.textContent = "";
+  }
+
+  // boardDiv.onclick = clickHandlerBoard;
 
   // updateScreen();
 }
